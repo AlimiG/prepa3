@@ -64,17 +64,21 @@ Asi $\overline X$\$ es un estimador insesgado de la media poblacional \$$\mu$.
 
 \
 
-| simbolo           | que es?                              | Sabemos que es?                          |
-|-------------------|--------------------------------------|------------------------------------------|
-| $$                
-   \overline X      
-   $$               | Media de la **muestra**              | Si, lo calculamos de los datos           |
-| $$                
-   \mu              
-   $$               | Media real de la **poblacion**       | Casi nunca sabremos su valor con certeza |
-| $$                
-   \overline \mu    
-   $$               | Estimado de la media de la poblacion | Si, es identico a la media de la muestra |
++-----------------+--------------------------------------+------------------------------------------+
+| simbolo         | que es?                              | Sabemos que es?                          |
++=================+======================================+==========================================+
+| $$              | Media de la **muestra**              | Si, lo calculamos de los datos           |
+|   \overline X   |                                      |                                          |
+|   $$            |                                      |                                          |
++-----------------+--------------------------------------+------------------------------------------+
+| $$              | Media real de la **poblacion**       | Casi nunca sabremos su valor con certeza |
+|   \mu           |                                      |                                          |
+|   $$            |                                      |                                          |
++-----------------+--------------------------------------+------------------------------------------+
+| $$              | Estimado de la media de la poblacion | Si, es identico a la media de la muestra |
+|   \overline \mu |                                      |                                          |
+|   $$            |                                      |                                          |
++-----------------+--------------------------------------+------------------------------------------+
 
 \
 
@@ -98,17 +102,21 @@ $$
  \hat \sigma  =  \sqrt{\frac{1}{N-1} \sum^{N}_{i = 1}(x_i - \overline X)^2}
 $$
 
-| simbolo           | que es?                                          | Sabemos que es?                                                               |
-|-------------------|--------------------------------------------------|-------------------------------------------------------------------------------|
-| $$                
-  S^2               
-  $$                | Varianza de la **muestra**                       | Si, la calculamos de los datos                                                |
-| $$                
-  \sigma ^2         
-  $$                | Varianza de la **poblacion**                     | Casi nunca sabremos su valor real con certeza                                 |
-| $$                
-  \hat \sigma ^2    
-  $$                | **Estimador** de la varianza de la **Poblacion** | Si, es **casi** igual que la varianza de la muestra pero con un ligero ajuste |
++-----------------+--------------------------------------------------+-------------------------------------------------------------------------------+
+| simbolo         | que es?                                          | Sabemos que es?                                                               |
++=================+==================================================+===============================================================================+
+| $$              | Varianza de la **muestra**                       | Si, la calculamos de los datos                                                |
+|  S^2            |                                                  |                                                                               |
+|  $$             |                                                  |                                                                               |
++-----------------+--------------------------------------------------+-------------------------------------------------------------------------------+
+| $$              | Varianza de la **poblacion**                     | Casi nunca sabremos su valor real con certeza                                 |
+|  \sigma ^2      |                                                  |                                                                               |
+|  $$             |                                                  |                                                                               |
++-----------------+--------------------------------------------------+-------------------------------------------------------------------------------+
+| $$              | **Estimador** de la varianza de la **Poblacion** | Si, es **casi** igual que la varianza de la muestra pero con un ligero ajuste |
+|  \hat \sigma ^2 |                                                  |                                                                               |
+|  $$             |                                                  |                                                                               |
++-----------------+--------------------------------------------------+-------------------------------------------------------------------------------+
 
 Como hemos visto, no es deficil calcular los estimadores de la poblacion, sin embargo, como podemos corroborar, estos estimadores dependen de la muestra que tome. Si tomo muchas muestras y calculo varias veces estos estimadores, veremos que varian de muestra en muestra. Es por eso que debemos buscar la manera de asegurar el rango en que nuestros estimadores se encontraran, con algun grado de certeza.
 
@@ -173,20 +181,21 @@ n
 
 Es decir, para tener un margen de error de +- \$50 necesitariamos una muestra aleatorioa de 44 apartamentos
 
-4.  En una amplia muestra de aceite de oliva italianos se observan, entre otras cosas, la variable "porcentaje de ́acido oleico en la fracciion lipidica". Consideraremos dos de las areas de procedencia de los aceites: *Liguria Occidental* y *Liguria Oriental*
+4.  En una amplia muestra de aceite de oliva italianos se observan, entre otras cosas, la variable "porcentaje de acido oleico en la fracciion lipidica". Consideraremos dos de las areas de procedencia de los aceites: *Liguria Occidental* y *Liguria Oriental*
 
-    ![](C:/Users/x52/AppData/Local/RStudio/tmp/paste-67B64B57.png)
+    ![](italy.png)
 
 Se analizaron 50 muestras procedentes de Liguria Occidental y otras 50 de Liguria Oriental obte-niendo los siguientes resultados:
 
-| Region             | $\overline x$ | $$                                                                                    
-                                                                                                                  s^2        
-                                                                                                                  $$         | $$                                                                                                                                            
-                                                                                                                                                                                                                                                                  s          
-                                                                                                                                                                                                                                                                  $$         |
-|--------------------|---------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| Liguria Occidental | 76.742        | 1.356                                                                                 | 1.164                                                                                                                                         |
-| Liguria Oriental   | 77.46         | 2.47                                                                                  | 1.572                                                                                                                                         |
++--------------------+---------------+------------+----------------------+
+| Region             | $\overline x$ | $$         | $$                   |
+|                    |               | s^2        | s                    |
+|                    |               | $$         | $$                   |
++====================+===============+============+======================+
+| Liguria Occidental | 76.742        | 1.356      | 1.164                |
++--------------------+---------------+------------+----------------------+
+| Liguria Oriental   | 77.46         | 2.47       | 1.572                |
++--------------------+---------------+------------+----------------------+
 
 Suponiendo normalidad y homocedasticidad, a un nivel de significacion del 1 % ,calcular el intervalo de confianza para la diferencia de la cantidad media de acido oleico en los aceites de ambas regiones. Especificar las suposiciones previas para que el procedimientoempleado sea valido
 
@@ -218,22 +227,20 @@ t  = qt(c(alpha/2,1-alpha/2), 98)
 Ahora podemos calcular el IC
 
 ```{r}
-IC = x_1_var - x_2_var + t*sp*sum
+IC = x_1_var - x_2_var + t*sp*sumy
 IC
 #IC2 = x_1_var - x_2_var + t*sqrt(s_1/n + s_2/n)
 ```
 
-5.  A partir de los resultados anteriores, ¿es razonable suponer que la cantidad mediade ́acido oleico es diferente en Liguria Oriental y Liguria Occidental? ¿Y con una confianza del 90 %?
+5.  A partir de los resultados anteriores,es razonable suponer que la cantidad mediade acido oleico es diferente en Liguria Oriental y Liguria Occidental? Y con una confianza del 90 %?
 
     Como el cero se encuentra dentro del intervalo, con los datos que tenemos,y con dicho nivel de confianza. No podemos asegurar de que hayan diferencias en la cantidad de acido olcico entre ambas regiones.
 
 Si cambiaramos el nivel de confianza a 90% lo unico que cambia es el percentil que cambia a 1.66, lo que dejaria al cero fuera del intervalo. Por lo tanto, con una confianza del 90% si podriamos decir que los niveles del acido son distintos entre las dos regiones.
 
-6.  Calcular el intervalo de confianza al 95 % para la varianza de la cantidad de ́acido oleico en Liguria Oriental. Especificar las suposiciones previas para que el procedimientoempleado sea valido.
+6.  Calcular el intervalo de confianza al 95 % para la varianza de la cantidad de acido oleico en Liguria Oriental. Especificar las suposiciones previas para que el procedimientoempleado sea valido.
 
-<!-- -->
-
-    Asumiendo normalidad\*\*, el intervalo de confianza a calcular es el siguiente
+    Asumiendo normalidad, el intervalo de confianza a calcular es el siguiente
 
     $$IC_{1-\alpha}(\sigma^2) = (\frac{(n-1)s^2}{\chi^2_{n-1; \alpha/2}}, \frac{(n-1)s^2}{\chi^2_{n-1;1- \alpha/2}})$$
 
@@ -246,4 +253,14 @@ Si cambiaramos el nivel de confianza a 90% lo unico que cambia es el percentil q
 
     numerador = (n-1)*s
     IC = c(numerador/inf, numerador/sup)
+
+
     ```
+
+![](not_normal.png)
+
+## Referencias
+
+learn r from Danielle Navarro
+
+Illustrations by Allison Horst
