@@ -1,0 +1,249 @@
+---
+title: "Prepa3"
+author: "Alimi Garmendia"
+date: "6/4/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Muestreo, realmente importa?
+
+```{r echo=FALSE}
+estImg <- list()
+emphCol <- rgb(0,0,1)
+emphColLight <- rgb(.5,.5,1)
+emphGrey <- grey(.5)
+colour <- TRUE
+	width <- 4.5
+	height <- 4.5
+	
+	# plot
+	x <- 60:140
+	y <- dnorm(x,100,15)
+	plot(x,y,lwd=3,type="l",col=ifelse(colour,emphCol,"black"),
+		xlab="IQ Score", ylab="Probability Density",frame.plot=FALSE
+	)
+	
+	
+	# function to do all the work
+	plotSamples <- function( n ) {
+		
+		IQ <- rnorm(n, 100, 15)
+		hist( IQ, breaks=seq(10,180,5), border="white", 
+			col=ifelse(colour,emphColLight,emphGrey),
+			xlab="IQ Score", ylab="Frequency", xlim=c(60,140),
+			main=""
+		)
+		print( paste( "n=",n,"mean=",mean(IQ), "sd=",sd(IQ) ) )
+	}
+	
+	# plot two different sample sizes
+	plotSamples(100)
+	plotSamples(100)
+	plotSamples(10000)
+```
+
+No siempre vamos a tener acceso a muchas muestras de la poblacion, es por ello que debemos muestrear de la mejor manera posible, que las muestras, en conjunto, representen de mejor manera la poblacion.
+
+Una vez tomada nuestra muestra debemos *estimar* las medidas estadisticas, una vez mas, escogiendo los aquellos estimadores que tengan menor cesgo o *bias*
+
+## Estimadores
+
+Para estimar la media de la poblacion, podemos usar el mismo procedimiento que usamos para calcular la media de la muestra, es decir
+
+$$
+\overline X = \frac{1}{N}\sum^{N}_{i = 1} x_i
+$$
+
+Asi $\overline X$\$ es un estimador insesgado de la media poblacional \$$\mu$.
+
+\
+
+| simbolo           | que es?                              | Sabemos que es?                          |
+|-------------------|--------------------------------------|------------------------------------------|
+| $$                
+   \overline X      
+   $$               | Media de la **muestra**              | Si, lo calculamos de los datos           |
+| $$                
+   \mu              
+   $$               | Media real de la **poblacion**       | Casi nunca sabremos su valor con certeza |
+| $$                
+   \overline \mu    
+   $$               | Estimado de la media de la poblacion | Si, es identico a la media de la muestra |
+
+\
+
+Para estimar la desviacion estandar de la muestra tenemos que realizar un pequeños ajuste de lo que conocemos
+
+Habiamos definido la varianza de una muestra como
+
+$$
+S^2 = \frac{1}{N} \sum^{N}_{i = 1}(x_i - \overline X)^2
+$$
+
+Sin embargo, no podemos asumir este valor como estimador de la varianza de la poblacion pues este estimador es un estimador cesgado. Se puede demostrar que, para obtener un estimador incesgado de la varianza poblacional podemos usar como estimador
+
+$$
+ \hat \sigma^2  =  \frac{1}{N-1} \sum^{N}_{i = 1}(x_i - \overline X)^2
+$$
+
+Luego podemos estimar la desviacion estandar usando
+
+$$
+ \hat \sigma  =  \sqrt{\frac{1}{N-1} \sum^{N}_{i = 1}(x_i - \overline X)^2}
+$$
+
+| simbolo           | que es?                                          | Sabemos que es?                                                               |
+|-------------------|--------------------------------------------------|-------------------------------------------------------------------------------|
+| $$                
+  S^2               
+  $$                | Varianza de la **muestra**                       | Si, la calculamos de los datos                                                |
+| $$                
+  \sigma ^2         
+  $$                | Varianza de la **poblacion**                     | Casi nunca sabremos su valor real con certeza                                 |
+| $$                
+  \hat \sigma ^2    
+  $$                | **Estimador** de la varianza de la **Poblacion** | Si, es **casi** igual que la varianza de la muestra pero con un ligero ajuste |
+
+Como hemos visto, no es deficil calcular los estimadores de la poblacion, sin embargo, como podemos corroborar, estos estimadores dependen de la muestra que tome. Si tomo muchas muestras y calculo varias veces estos estimadores, veremos que varian de muestra en muestra. Es por eso que debemos buscar la manera de asegurar el rango en que nuestros estimadores se encontraran, con algun grado de certeza.
+
+## Intervalos de confianza
+
+Suponiendo que nuestras muestras tienen una distribucion aproximadamente normal. Que la media de la poblacion es $\mu$ y la SD $\sigma$ . Imaginemos que he hecho un estudio que incluye $N$ y que la media del IQ de estos participantes es $\overline X$ . Recordemos que, en una distribucion normal, hay una prob de 95% que una cantidad con distribucion normal se encuentre dentro de dos desviaciones\* estandar de la media. Es decir:
+
+```{r}
+qnorm(p = c(0.025,0.975))
+```
+
+Es decir, nuestra media muestral cumple que:
+
+$$
+\mu - 1.96 \frac{\sigma}{\sqrt n} \leq \overline X \leq \mu + 1.96 \frac{\sigma}{\sqrt n}  
+$$ Asi, trabajando un poco el algebra, podemos llegar a
+
+$$
+\overline X - 1.96 \frac{\sigma}{\sqrt n} \leq \mu \leq \overline X + 1.96 \frac{\sigma}{\sqrt n}  
+$$ Asi, este rango de valores tiene 95% de probabilidad de contener la media de la poblacion.
+
+Veamos que este procedimiento depende de que conozcamos la varianza de la **poblacion**, cosa que no siempre conoceremos. Por lo que debemos usar un estimador tomado de la **muestra,** $\hat \sigma$ . Esto es directo de hacer sin embargo esto implica que debemos hacer una correccion. En lugar de usar la distribucion normal, usaremos la distribucion t, que depende del numero de observaciones N. Cuando N es suficientemente grande, los valores obtenidos en la distribucion t y en la normal seran iguales.
+
+```{r}
+qt(p = .975, df = 10000)
+```
+
+## Ejercicios
+
+1.  Imaginemos que quieres rentar un apartamento de una habitacion en Caracas. La media de la renta mensual para una muestra aleatoria de 60 apartamentos que viste en el periodico es de \$1000. Asuma que la varianza de la poblacion es de \$200. Construya un intervalo de confianza del 95%
+
+    ```{r}
+    cuantil = qnorm(c(0.025,0.975))
+    sqrt_n = sqrt(60)
+    mean_muestra = 1000
+    varianza = 200
+
+    IC = 1000+cuantil*varianza/sqrt_n
+    IC
+    ```
+
+2.  Sobre cual poblacion de los apartamentos de Caracas podemos inferir, dados los resultados del apartado anterior?
+
+    Podemos usar el resultado anterior para estimar la media de los apartamentos de que vismo en el periodico. No podemos asegurar nada de todos los apartamentos de Caracas, pues no podemos asegurar que la muestra del periodico sea representativa
+
+3.  Que tan grande debe ser la muestra de los apartamentos de los apartados anteriores si queremos estiumar la media de la poblacion dentro de un margen de \$50 con una confianza del 90%?
+
+    ```{r}
+    alpha = 1-0.9
+    cuantil = qnorm(c(1-alpha/2))
+    cuantil
+    ```
+
+$$
+50 = Z*\frac{\sigma}{\sqrt{n}}
+$$
+
+```{r}
+n = (cuantil*varianza/50)**2
+n
+```
+
+Es decir, para tener un margen de error de +- \$50 necesitariamos una muestra aleatorioa de 44 apartamentos
+
+4.  En una amplia muestra de aceite de oliva italianos se observan, entre otras cosas, la variable "porcentaje de ́acido oleico en la fracciion lipidica". Consideraremos dos de las areas de procedencia de los aceites: *Liguria Occidental* y *Liguria Oriental*
+
+    ![](C:/Users/x52/AppData/Local/RStudio/tmp/paste-67B64B57.png)
+
+Se analizaron 50 muestras procedentes de Liguria Occidental y otras 50 de Liguria Oriental obte-niendo los siguientes resultados:
+
+| Region             | $\overline x$ | $$                                                                                    
+                                                                                                                  s^2        
+                                                                                                                  $$         | $$                                                                                                                                            
+                                                                                                                                                                                                                                                                  s          
+                                                                                                                                                                                                                                                                  $$         |
+|--------------------|---------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| Liguria Occidental | 76.742        | 1.356                                                                                 | 1.164                                                                                                                                         |
+| Liguria Oriental   | 77.46         | 2.47                                                                                  | 1.572                                                                                                                                         |
+
+Suponiendo normalidad y homocedasticidad, a un nivel de significacion del 1 % ,calcular el intervalo de confianza para la diferencia de la cantidad media de acido oleico en los aceites de ambas regiones. Especificar las suposiciones previas para que el procedimientoempleado sea valido
+
+Lo primero es elegir el intervalo adecuado para la **diferencia de medias**. Podemos suponer que las muestras en ambas regiones son independientes entre si. En base a las hipotesis dadas y al hecho de que no conocemos las varianzas, el intervalo sera el siguiente:
+
+$$
+IC_{1-\alpha}(\mu_1-\mu_2) = (\overline x_1 - \overline x_2 \pm  t_{n_1 + n_2 - 2; \frac{\alpha}{2}} s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} )
+$$
+
+con
+
+$s_p = \sqrt{\frac{(n_1-1)s_1^2 + (n_2 -1)s_2^2}{n_1+n_2 - 2} }$
+
+Asi
+
+```{r}
+x_1_var = 77.46
+x_2_var = 76.742
+s_1 = 2.47
+s_2 = 1.356
+n = 50
+sp = sqrt( ((n-1)*s_1 + (n-1)*s_2)/(2*n-2) )
+alpha = 0.01
+sumy = sqrt(2/n)
+
+t  = qt(c(alpha/2,1-alpha/2), 98)
+```
+
+Ahora podemos calcular el IC
+
+```{r}
+IC = x_1_var - x_2_var + t*sp*sum
+IC
+#IC2 = x_1_var - x_2_var + t*sqrt(s_1/n + s_2/n)
+```
+
+5.  A partir de los resultados anteriores, ¿es razonable suponer que la cantidad mediade ́acido oleico es diferente en Liguria Oriental y Liguria Occidental? ¿Y con una confianza del 90 %?
+
+    Como el cero se encuentra dentro del intervalo, con los datos que tenemos,y con dicho nivel de confianza. No podemos asegurar de que hayan diferencias en la cantidad de acido olcico entre ambas regiones.
+
+Si cambiaramos el nivel de confianza a 90% lo unico que cambia es el percentil que cambia a 1.66, lo que dejaria al cero fuera del intervalo. Por lo tanto, con una confianza del 90% si podriamos decir que los niveles del acido son distintos entre las dos regiones.
+
+6.  Calcular el intervalo de confianza al 95 % para la varianza de la cantidad de ́acido oleico en Liguria Oriental. Especificar las suposiciones previas para que el procedimientoempleado sea valido.
+
+<!-- -->
+
+    Asumiendo normalidad\*\*, el intervalo de confianza a calcular es el siguiente
+
+    $$IC_{1-\alpha}(\sigma^2) = (\frac{(n-1)s^2}{\chi^2_{n-1; \alpha/2}}, \frac{(n-1)s^2}{\chi^2_{n-1;1- \alpha/2}})$$
+
+    ```{r}
+    s= 2.47
+    n = 50
+    alpha = 0.05
+    sup = qchisq(alpha/2,n-1)
+    inf = qchisq(1-alpha/2,n-1)
+
+    numerador = (n-1)*s
+    IC = c(numerador/inf, numerador/sup)
+    ```

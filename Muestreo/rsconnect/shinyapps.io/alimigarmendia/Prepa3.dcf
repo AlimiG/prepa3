@@ -1,0 +1,13 @@
+name: Prepa3
+title: Prepa3
+username:
+account: alimigarmendia
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4233602
+bundleId: 4682502
+url: https://alimigarmendia.shinyapps.io/Prepa3/
+when: 1622947629.45735
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Rplots.pdf
